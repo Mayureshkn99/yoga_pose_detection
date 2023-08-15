@@ -161,3 +161,5 @@ cython_debug/
 
 data/
 pose_keypoints.csv
+uploads/
+model.joblib
