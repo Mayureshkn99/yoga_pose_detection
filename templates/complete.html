@@ -29,15 +29,16 @@
     <div class="container">
 
         <h3 class="text-center display-3 mt-3 mb-3">Result</h3>
-        
+        {% if detection %}
         <div style="text-align: center;">
-            <img src="{{ url_for('static', filename='reference/' + reference_image) }}" height="300px" class="image-responsive align-center" style="display: inline-block; margin-left: auto; margin-right: auto;">&nbsp;
+            <img src="{{ url_for('static', filename='reference/' + result + '.png') }}" height="300px" class="image-responsive align-center" style="display: inline-block; margin-left: auto; margin-right: auto;">&nbsp;
+            <img src="{{ url_for('static', filename='images/' + result + '.png') }}" height="300px" class="image-responsive align-center" style="display: inline-block; margin-left: auto; margin-right: auto;">
+        </div>
+        <h4 class="text-left display-5 text-center pt-3">Pose: <span style="color:green;">{{ result }}</span>
+        <br>Accuracy: {{ accuracy }}%</h4> {% else %}
+        <div style="text-align: center;">
             <img src="{{ url_for('static', filename='images/' + input_image) }}" height="300px" class="image-responsive align-center" style="display: inline-block; margin-left: auto; margin-right: auto;">
         </div>
-
-        {% if detection %}
-        <h4 class="text-left display-5 text-center pt-3">Pose: <span style="color:green;">{{ result }}</span>
-        <br>Accuracy: 95%</h4> {% else %}
         <h4 class="text-left display-5 text-center pt-3">Pose: <span style="color:red;">No Pose Detected</span></h4> {% endif %}
 
     </div>

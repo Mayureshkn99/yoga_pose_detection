@@ -26,13 +26,13 @@
             </ul>
         </div>
     </nav>
-    <div class="container mt-auto" style="padding-top: 10%;">
+    <div class="container mt-auto" style="padding-top: 5%;">
 
         <form id="upload-form" action="{{ url_for('upload') }}" method="post" enctype="multipart/form-data">
             <div class="row mt-5">
                 <div class="col-md-2"></div>
                 <div class="col-md-8 justify-content-center center">
-
+                    <img src="{{ url_for('static', filename='logo/' + 'logo.jpg') }}" height="200px" class="image-responsive align-center" style="display: block; margin-left: auto; margin-right: auto;">
                     <h3 class="display-5 text-center">Upload image of Yoga Pose: </h3>
                     <!-- <input id="file-picker" type="file" name="file" accept="image/*" multiple> -->
                     <input id="file-picker" type="file" name="file" accept="image/*" class="file-control col-md-6 d-flex justify-content-center" style="display: block; margin-left: auto; margin-right: auto; width: 40%;" required>

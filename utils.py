@@ -2,6 +2,7 @@ from unittest import result
 import cv2
 import numpy as np
 import mediapipe as mp
+from mediapipe import solutions
 from scipy.spatial.distance import euclidean
 from sklearn.metrics.pairwise import cosine_similarity
 
@@ -46,4 +47,12 @@ def compare(reference_keypoints, input_keypoints):
     return cosine_sim
 
 
-    return keypoints_data
+def draw_landmarks_on_image(rgb_image, detection_result):
+    annotated_image = np.copy(rgb_image)
+
+    solutions.drawing_utils.draw_landmarks(
+        annotated_image,
+        detection_result.pose_landmarks,
+        solutions.pose.POSE_CONNECTIONS,
+        solutions.drawing_styles.get_default_pose_landmarks_style())
+    return annotated_image

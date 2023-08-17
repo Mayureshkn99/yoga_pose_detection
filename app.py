@@ -1,4 +1,5 @@
 import os
+import cv2
 import utils
 import joblib
 from flask import Flask, render_template, request
@@ -44,15 +45,24 @@ def upload():
             dest = '/'.join([TARGET, file.filename])
             file.save(dest)
 
-        keypoints = utils.extract_keypoints(dest)
-        if len(keypoints) != 33*4:
+        _, input_keypoints = utils.extract_keypoints(dest)
+        if len(input_keypoints) != 33*4:
             detection = False
             result = None
+            accuracy = None
         else:
-            result = MODEL.predict([keypoints])[0]
+            result = MODEL.predict([input_keypoints])[0]
             detection = True
-
-        return render_template('complete.html', reference_image=result+".png", input_image=file.filename, detection=detection, result=result)
+            reference_results, reference_keypoints = utils.extract_keypoints(f'static/reference/{result}.png')
+            accuracy = utils.compare(reference_keypoints, input_keypoints)
+            accuracy = f'{accuracy*100:.2f}'
+            image = cv2.imread(dest)
+            image_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+            ann_image = utils.draw_landmarks_on_image(image_rgb, reference_results)
+            ann_image_bgr = cv2.cvtColor(ann_image, cv2.COLOR_RGB2BGR)
+            cv2.imwrite(f"static/images/{result}.png", ann_image_bgr)
+        print(dest)
+        return render_template('complete.html', detection=detection, input_image=file.filename, result=result, accuracy=accuracy)
     return render_template('upload.html')
 
 if __name__ == "__main__":

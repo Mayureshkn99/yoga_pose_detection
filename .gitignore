@@ -163,3 +163,4 @@ data/
 pose_keypoints.csv
 uploads/
 model.joblib
+test.py
