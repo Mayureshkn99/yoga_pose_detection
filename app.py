@@ -3,14 +3,14 @@ import utils
 import joblib
 from flask import Flask, render_template, request
 
-app = Flask(__name__, static_folder="images")
+app = Flask(__name__)
 
 APP_ROOT = os.path.dirname(os.path.abspath(__file__))
 
 # Define the allowed file extensions for uploaded images
 ALLOWED_EXTENSIONS = {'jpg', 'jpeg', 'png'}
 
-TARGET = os.path.join(APP_ROOT, 'images/')
+TARGET = os.path.join(APP_ROOT, 'static/images/')
 
 if not os.path.isdir(TARGET):
     os.mkdir(TARGET)
@@ -52,7 +52,7 @@ def upload():
             result = MODEL.predict([keypoints])[0]
             detection = True
 
-        return render_template('complete.html', image_name=file.filename, detection=detection, result=result)
+        return render_template('complete.html', reference_image=result+".png", input_image=file.filename, detection=detection, result=result)
     return render_template('upload.html')
 
 if __name__ == "__main__":
