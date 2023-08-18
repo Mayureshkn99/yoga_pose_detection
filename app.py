@@ -17,7 +17,6 @@ if not os.path.isdir(TARGET):
     os.mkdir(TARGET)
 
 MODEL = joblib.load('model.joblib')
-
 camera = cv2.VideoCapture(0)
 
 # Function to check if a filename has an allowed extension
@@ -75,6 +74,7 @@ font_scale = 1
 font_color = (255, 0, 0)  # White color
 thickness = 2
 
+
 def generate_frames():
     while True:
         success, frame = camera.read()
@@ -105,13 +105,24 @@ def generate_frames():
                 # cv2.imwrite(f"static/images/{result}.png", ann_image_bgr)
                 ret, buffer = cv2.imencode('.jpg', ann_image_bgr)
             frame = buffer.tobytes()
-            yield (b'--frame\r\n'
-                   b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
 
+        yield (buffer.tobytes(), result, accuracy)
+
+current_results = {}
 
 @app.route('/video_feed')
 def video_feed():
-    return Response(generate_frames(), mimetype='multipart/x-mixed-replace; boundary=frame')
+    def wrapper():
+        for frame, result, accuracy in generate_frames():
+            current_results['result'] = result
+            current_results['accuracy'] = accuracy
+            yield (b'--frame\r\n'
+                   b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
+    return Response(wrapper(), mimetype='multipart/x-mixed-replace; boundary=frame')
 
-if __name__ == "__main__":
+@app.route('/get_results')
+def get_results():
+    return current_results
+
+if __name__ == '__main__':
     app.run(port=5000, debug=True)
