@@ -58,7 +58,7 @@
                 type: 'GET',
                 success: function(data) {
                     // Update the HTML elements with new results
-                    $('#resultPose').text("Result Pose: " + data.result);
+                    $('#resultPose').text(data.result);
                     $('#accuracy').text("Accuracy: " + data.accuracy + "%");
                 }
             });

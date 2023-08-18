@@ -68,11 +68,11 @@ def upload():
         return render_template('complete.html', detection=detection, input_image=file.filename, result=result, accuracy=accuracy)
     return render_template('upload.html')
 
-# Define the font settings
-font = cv2.FONT_HERSHEY_SIMPLEX
-font_scale = 1
-font_color = (255, 0, 0)  # White color
-thickness = 2
+# # Define the font settings
+# font = cv2.FONT_HERSHEY_SIMPLEX
+# font_scale = 1
+# font_color = (255, 0, 0)  # White color
+# thickness = 2
 
 
 def generate_frames():
@@ -97,11 +97,11 @@ def generate_frames():
                 image_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
                 ann_image = utils.draw_landmarks_on_image(image_rgb, reference_results)
                 ann_image_bgr = cv2.cvtColor(ann_image, cv2.COLOR_RGB2BGR)
-                text = f"Result: {result} | Accuracy: {accuracy}"
-                text_size = cv2.getTextSize(text, font, font_scale, thickness)[0]
-                text_x = ann_image_bgr.shape[1] - text_size[0] - 10  # Adjust the position as needed
-                text_y = text_size[1] + 10
-                cv2.putText(ann_image_bgr, text, (text_x, text_y), font, font_scale, font_color, thickness)
+                # text = f"Result: {result} | Accuracy: {accuracy}"
+                # text_size = cv2.getTextSize(text, font, font_scale, thickness)[0]
+                # text_x = ann_image_bgr.shape[1] - text_size[0] - 10  # Adjust the position as needed
+                # text_y = text_size[1] + 10
+                # cv2.putText(ann_image_bgr, text, (text_x, text_y), font, font_scale, font_color, thickness)
                 # cv2.imwrite(f"static/images/{result}.png", ann_image_bgr)
                 ret, buffer = cv2.imencode('.jpg', ann_image_bgr)
             frame = buffer.tobytes()
