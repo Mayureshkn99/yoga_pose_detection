@@ -31,7 +31,7 @@
         <h3 class="text-center display-3 mt-3 mb-3">Result</h3>
         {% if True %}
         <div style="text-align: center;">
-            <img src="../static/reference/Dhanurasana.png" height="300px" class="image-responsive align-center" style="display: inline-block; margin-left: auto; margin-right: auto;">&nbsp;
+            <img id="referenceImage" src="../static/reference/Dhanurasana.png" height="300px" class="image-responsive align-center" style="display: inline-block; margin-left: auto; margin-right: auto;">
             <img src="{{ url_for('video_feed') }}" height="300px" class="image-responsive align-center" style="display: inline-block; margin-left: auto; margin-right: auto;">
         </div>
         <h4 class="text-left display-5 text-center pt-3">Pose: <span id='resultPose' style="color:green;"></span>
@@ -52,16 +52,24 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     $(document).ready(function(){
-        setInterval(function(){
-            $.ajax({
-                url: '/get_results',
-                type: 'GET',
-                success: function(data) {
-                    // Update the HTML elements with new results
-                    $('#resultPose').text(data.result);
-                    $('#accuracy').text("Accuracy: " + data.accuracy + "%");
-                }
-            });
-        }, 1000);  // Fetch results every 1 second
+        $(document).ready(function(){
+            setInterval(function(){
+                $.ajax({
+                    url: '/get_results',
+                    type: 'GET',
+                    success: function(data) {
+                        // Update the HTML elements with new results
+                        $('#resultPose').text(data.result);
+                        $('#accuracy').text("Accuracy: " + data.accuracy + "%");
+
+                        // Update the reference image based on the current pose
+                        if(data.result && data.result !== "No Pose Detected") {
+                            $('#referenceImage').attr("src", "../static/reference/" + data.result + ".png");
+                        }
+                    }
+                });
+            }, 1000);  // Fetch results every 1 second
+        });
+
     });
 </script>
