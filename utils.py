@@ -9,8 +9,11 @@ from sklearn.metrics.pairwise import cosine_similarity
 # Initialize MediaPipe Pose
 mp_pose = mp.solutions.pose
 
-def extract_keypoints(image_path):
+def extract_keypoints_from_path(image_path):
     image = cv2.imread(image_path)
+    return extract_keypoints(image)
+
+def extract_keypoints(image):
     image_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
     
     pose = mp_pose.Pose()
